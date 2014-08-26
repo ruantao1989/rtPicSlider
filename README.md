@@ -1,4 +1,4 @@
 rtPicSlider
 ===========
 
-PicSlider
+pictures slider
