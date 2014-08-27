@@ -24,7 +24,6 @@
 		}
 
 		//添加
-
 		function addTipButtons() {
 			var ulstart = '<ul id="pagination">',
 				ulcontent = '',
@@ -117,8 +116,20 @@
 			}
 		}
 
-		//初始化dom元素
-		function initDom() {
+		function processWidthAndHeight(str){
+			if (typeof str == "number" ){
+				return str + "px";
+			}
+
+			if( /px$/.text(str) || /%$/.text(str)){
+				return str
+			}
+
+			return str + "px";
+		}
+
+		//初始化
+		function init() {
 			var fullScreenSlider = document.createElement("div");
 			fullScreenSlider.id = "full-screen-slider";
 			fullScreenSlider.innerHTML =
@@ -130,8 +141,8 @@
 				+ '<img src="css/images/point_right.png" />' 
 				+ '</div>';
 			fullScreenSlider.className = "clearfloat";
-			fullScreenSlider.style.width = settings.width + "px";
-			fullScreenSlider.style.height = settings.height + "px";
+			fullScreenSlider.style.width = processWidthAndHeight(settings.width);
+			fullScreenSlider.style.height = processWidthAndHeight(settings.height);
 			sliderObj.append(fullScreenSlider);
 			for (var i = 0, len = settings.data.length; i < len; i++) {
 				var tar = $(this).find("#slides");
@@ -176,7 +187,7 @@
 		}
 
 		//执行
-		initDom();
+		init();
 		return this;
 	};
 })(jQuery, window);
