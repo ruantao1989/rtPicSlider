@@ -1,8 +1,8 @@
-(function($, window) {
+$(function($) {
 	jQuery.fn.rtPicSlider = function(options) {
 
 		var settings = $.extend({
-			'data': [],
+			'datas': [],
 			'speed': 5000,
 			'width': 800,
 			'height': 400,
@@ -12,12 +12,22 @@
 		var version = '0.0.1';
 
 		var sliderObj = $(this),
-			numpic = settings.data.length - 1 || 0,
+			numpic = initNumpic();
 			nownow = 0,
 			inout = 0,
 			timer = 0,
 			paginations = {}; //页号按钮
 
+		//IE获取类数组对象length时候,会把length也算上, 会多1
+		function initNumpic(){
+			var res = 0;
+			for( var i=0,len=settings.datas.length; i<len ; i++ ){
+				if( typeof settings.datas[i] == "object"){
+					res ++;
+				}
+			}
+			return res > 0 ? res-1 : 0;
+		}
 
 		function imgClick(jqObj) {
 			alert("GOTO==>" + jqObj.data("url"));
@@ -121,8 +131,8 @@
 				return str + "px";
 			}
 
-			if( /px$/.text(str) || /%$/.text(str)){
-				return str
+			if( /px$/.test(str+"") || /%$/.test(str+"")){
+				return str;
 			}
 
 			return str + "px";
@@ -144,11 +154,13 @@
 			fullScreenSlider.style.width = processWidthAndHeight(settings.width);
 			fullScreenSlider.style.height = processWidthAndHeight(settings.height);
 			sliderObj.append(fullScreenSlider);
-			for (var i = 0, len = settings.data.length; i < len; i++) {
-				var tar = $(this).find("#slides");
-				sliderObj.find("#slides").append(
-					'<li data-url="' + settings.data[i].url 
-					+ '" style="background: url(' + settings.data[i].pic + ') no-repeat center top"></li>');
+			for (var i = 0, len = settings.datas.length; i < len; i++) {
+				var setIn = settings.datas[i];
+				if( setIn ){
+					sliderObj.find("#slides").append(
+							'<li data-url="' + setIn.url /*? setIn.url : ""*/
+							+ '" style="background: url(' + setIn.pic /*? setIn.pic : ""*/ + ') no-repeat center top"></li>');
+				}
 			}
 			$('#slides li').eq(0).siblings('li').css({
 				'display': 'none'
@@ -190,4 +202,4 @@
 		init();
 		return this;
 	};
-})(jQuery, window);
+});
