@@ -6,10 +6,11 @@ $(function($) {
 			'speed': 5000,
 			'width': 800,
 			'height': 400,
-			'paginations': true
+			'paginations': true,
+			'targetBlank': true
 		}, options);
 
-		var version = '0.0.1';
+		var version = '0.0.2';
 
 		var sliderObj = $(this),
 			numpic = initNumpic();
@@ -30,7 +31,13 @@ $(function($) {
 		}
 
 		function imgClick(jqObj) {
-			alert("GOTO==>" + jqObj.data("url"));
+			var mode = settings.targetBlank;
+			//alert("GOTO==>" + jqObj.data("url"));
+			if( mode ){
+				window.open(jqObj.data("url"));
+			} else {
+				window.location.href=jqObj.data("url");
+			}
 		}
 
 		//添加
@@ -49,7 +56,7 @@ $(function($) {
 			clearInterval(timer);
 			var changenow = $(this).index();
 
-			$('#slides li').eq(nownow).css('z-index', '900');
+			$('#slides li').eq(nownow).css('z-index', '10');
 			$('#slides li').eq(changenow).css({
 				'z-index': '800'
 			}).show();
@@ -155,6 +162,7 @@ $(function($) {
 			fullScreenSlider.style.height = processWidthAndHeight(settings.height);
 			sliderObj.append(fullScreenSlider);
 			for (var i = 0, len = settings.datas.length; i < len; i++) {
+				//var tar = $(this).find("#slides");
 				var setIn = settings.datas[i];
 				if( setIn ){
 					sliderObj.find("#slides").append(
